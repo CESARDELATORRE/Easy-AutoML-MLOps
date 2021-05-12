@@ -1,0 +1,4 @@
+name: train_dataset_beer
+version: 1
+description: "Forecasting beer production dataset"
+local_path: ./data
