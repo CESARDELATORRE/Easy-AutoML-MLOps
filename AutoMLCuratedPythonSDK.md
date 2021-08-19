@@ -123,9 +123,9 @@ automl_job = AutoMLJob.build(
     task="forecasting",
     compute="cpu-cluster", # 'local' if not using remote
     dataset={
-        "train": train_df,
-        "valid": valid_df,
-        "test": test_df,
+        "train": "train_data_name:1",
+        "valid": "valid_data_name:1",
+        "test": "test_data_name:1",
     },
     target="target_column_name",
     configuration={
