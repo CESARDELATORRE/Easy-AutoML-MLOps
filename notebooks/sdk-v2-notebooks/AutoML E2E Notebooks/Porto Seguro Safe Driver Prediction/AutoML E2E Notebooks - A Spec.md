@@ -60,6 +60,7 @@ Being an MLFlow Model, here we can link to the examples that AzureML is going to
 # Overview
 
 In the following sections, I try to explain the motivations behind the above proposal of how I think we should structure our Notebooks.
+
 I begin with introducing key terminologies that are required to understand some the explanations that follows. That is followed by a general overview of the workflow that Data Scientists tend to follow for solving a problem in their domain. In the sections that follow, I try to explain how AutoML fits into the pipeline, and how some of our current and future plans (such as Componentization or parallel offerings such as NLP or Vision) combine together to provide a picture of how we should be presenting our notebooks to end users.
 
 # Terminology
@@ -86,6 +87,7 @@ Building models is an iterative process, where once we have our first model (cal
 To keep this feedback loop fast and efficient, the data is often subsampled down (if it is large) and the model is developed locally. Once a good set of configuration is found, training happens on the whole dataset, and then the process logically flows into the territory of how to deploy it into production (or how to submit the results to Kaggle)
 
 The kind of questions that get asked of a model (or the data) depends on the expertise of the Data Scientist. 'Citizen' data scientists, while learning, can rely on what is provided to them (e.g. from the UI), and make decisions about the usefulness of a model, while skilled professionals generally expect to get down to the model details, either inspecting it manually or using some libraries to do it for them (like SHAP, tree interpreters etc.).
+
 This kind of model interpretation requires an interactive communication with the model - i.e., one has the model loaded in-memory and is able to see how data interacts with it. This requires that the 'development environment' is capable of loading the given model in the first place, and that the model has well defined APIs and semantics (e.g. adhereing to scikit learn PyTorch APIs)
 
 # How does AutoML fit within the Data Science workflow?
@@ -108,6 +110,7 @@ As such, given the separation of concerns between job submission ('control plane
 # Componentization
 
 We are already out to split up the monolith Client side APIs for AutoML job submission into smaller sub-components, based on the workflow described above. E.g. Featurization, Train, Test, Explain, etc. This is beneficial for the more advanced users of AutoML, who want a little more control on the end to end workflow. 
+
 Each of these components will have it's own set of 'control' plane operations (e.g. for configuring and submitting jobs) and 'data' plane operations (e.g. for interpreting models & predictions, transformation pipelines) possibly with a different set of runtime library (e.g. metrics, responsible ai (?)). As such, our notebooks should showcase each of these steps in a data science workflow as standalone components. 
 
 > ***Draft Proposal:** What used to be an end to end notebook in v1, we now divide them roughly into what maps to at least one of the above described components of a data science workflow. If each component wants to showcase more features, we can go a level deeper, and link to an '[examples](https://github.com/Azure/azureml-examples/tree/main/python-sdk)' directory on Github. But the core and the most often used feature must be shown on top level.*
@@ -142,6 +145,7 @@ The topic on how to converge runtime SDKs requires it's own discussion and specs
 Consolidating each of the draft proposals above:
 
 For each area (Vision, NLP, Tabular) - we should have at least one comprehensive example on a real-world dataset (not MNIST, Digits, bank classification etc.), that showcases the end to end data science workflow. These notebooks must include the descriptions of the nuances in the dataset and how AutoML helps overcome them, teaching users how different pieces connect (e.g. Based on exploratory data analysis: forcing a custom transformation on a column, blocking certain linear models because they won't do well, etc.). Jupyter notebooks are great at [storytelling](https://en.wikipedia.org/wiki/Literate_programming), and we should have one to tell using AutoML. Each area can have one notebook per area of focus (Data Exploration or Preprocessing, Model Training, Interpretation etc.)
+
 Example: [Predicting koala populations](https://www.notion.so/4027ec902e239c93eaaa8714f173bcfc) (An all-in-one notebook, but notice how they tie together the EDA with the problem they're trying to solve)
 
 For quick-starter style notebooks, each area must have minimal divergence (i.e. the Component APIs must not differ too much) - so as to allow a user well-versed in Tabular Learning to also be able to extend her knowledge into other areas like NLP, Vision.
